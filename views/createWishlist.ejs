@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Create Wishlist - <% include includes/smalltitle %></title>
+	<meta name="viewport" content="width=device-width, initial-scale-1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" media="screen" href="css/style.css">
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+	<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+	<script	src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.5.8/angular-sanitize.min.js"></script>
+	<script	src="https://cdnjs.cloudflare.com/ajax/libs/ng-csv/0.3.6/ng-csv.min.js"></script>
+</head>
+<body>
+
+<% include includes/navbar %>
+
+<div class="container">
+  <div class="jumbotron">
+    <h1>Holiday Wish List</h1>
+    <h2><% include includes/smalltitle %></h2>
+  </div>
+  
+<div id="user-list" class="row" ng-app="getOptionsApp" ng-controller="getOptionsCtrl">
+  	<div class="options" ng-repeat="options in allOptions">
+	  <div class="row">
+	  	<div class="col-sm-12">
+	  		<div class="wishlistwarning">
+	  		&nbsp; {{options.wishlist_warning}}
+	  		</div>
+	  	</div>
+	  <br>
+	  </div>
+	</div>
+</div>
+  
+ <form class="form-horizontal" action = "/add-wish" id="addWishList" method ="post" role="form">
+ 
+  <div class="row">
+  
+    <div class="col-sm-12">
+      <h3>Personal Details</h3>
+    </div>
+	
+    <div class="col-sm-6">
+    	  <div class="form-group">
+			<label class="control-label col-sm-3" for="FirstName">First Name:</label>
+	    	  <div class="col-sm-6">
+				<input type="text" class="form-control" id="FirstName" tabindex="1" placeholder="Enter First Name" name="FirstName" required>
+	    	  </div>
+		  </div>
+		  
+    	  <div class="form-group">
+			<label class="control-label col-sm-3" for="LastInitial">Last Initial:</label>
+	    	  <div class="col-sm-6">
+				<input type="text" maxlength="1" class="form-control" id="LastInitial" tabindex="2" placeholder="Enter Last Initial" name="LastInitial" required>
+	    	  </div>
+    	  </div>
+		  
+    	  <div class="form-group">
+			<label class="control-label col-sm-3" for="Age">Age:</label>
+	    	  <div class="col-sm-6">
+				<select class="form-control" id="Age" tabindex="3" name="Age" required>
+	    	  	<option selected disabled value="">Select Age</option>
+					<option>1 Month</option>
+					<option>2 Months</option>
+					<option>3 Months</option>
+					<option>4 Months</option>
+					<option>5 Months</option>
+					<option>6 Months</option>
+					<option>7 Months</option>
+					<option>8 Months</option>
+					<option>9 Months</option>
+					<option>10 Months</option>
+					<option>11 Months</option>
+					<option>12 Months</option>
+					<option>13 Months</option>
+					<option>14 Months</option>
+					<option>15 Months</option>
+					<option>16 Months</option>
+					<option>17 Months</option>
+					<option>18 Months</option>
+					<option>19 Months</option>
+					<option>20 Months</option>
+					<option>21 Months</option>
+					<option>22 Months</option>
+					<option>23 Months</option>
+					<option>2 Years</option>
+					<option>3 Years</option>
+					<option>4 Years</option>
+					<option>5 Years</option>
+					<option>6 Years</option>
+					<option>7 Years</option>
+					<option>8 Years</option>
+					<option>9 Years</option>
+					<option>10 Years</option>
+					<option>11 Years</option>
+					<option>12 Years</option>
+					<option>13 Years</option>
+					<option>14 Years</option>
+					<option>15 Years</option>
+					<option>16 Years</option>
+					<option>17 Years</option>
+					<option>18 Years</option>
+				</select>
+	    	  </div>
+	      </div>
+		  
+    	  <div class="form-group">
+			<label class="control-label col-sm-3">Gender:</label>
+	    	  <div class="col-sm-6">
+	    	    <div class="radio">
+	    	      <label><input type="radio" name="Gender" id="Male" value="Male" tabindex="4" required>Male &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+	    	      <label><input type="radio" name="Gender" id="Female" value="Female" tabindex="5" required>Female</label>
+	    	    </div>
+	    	  </div>
+    	  </div>
+    	  
+    	  <div class="form-group">
+			<label class="control-label col-sm-3">Child Placement:</label>
+	    	  <div class="col-sm-6">
+	    	    <div class="radio">
+	    	      <label><input type="radio" data-toggle="collapse" data-target=".FosterHome.in,.Cottage:not(.in)" name="PlacementType" id="Cottage" value="Cottage" tabindex="6">Cottage &nbsp;&nbsp;</label>
+	    	      <label><input type="radio" data-toggle="collapse" data-target=".Cottage.in,.FosterHome:not(.in)" name="PlacementType" id="Foster" value="Foster" tabindex="7">Foster Home</label>
+	    		</div>
+	    	  </div>
+    	  </div>
+    	  
+    	  <div class="Cottage panel-collapse collapse">
+			<div class="form-group">
+				<label class="control-label col-sm-3" for="Cottage">Cottage:</label>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" id="Cottage" tab-index="0" placeholder="Enter Cottage Name" name="PlacementName">
+					</div>
+			</div>
+    	  </div>
+		  
+    	  <div class="FosterHome panel-collapse collapse">
+			<div class="form-group">
+				<label class="control-label col-sm-3" for="FosterFamily">Foster Family:</label>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" id="FosterFamily" tab-index="0" placeholder="Enter Foster Family Name" name="PlacementName">
+					</div>
+			</div>
+    	  </div>
+    	  
+    	  <div class="form-group">
+			<label class="control-label col-sm-3" for="CaseWorker">CHN Primary:</label>
+	    	  <div class="col-sm-6">
+				<input type="text" class="form-control" id="CaseWorker" tabindex="8" placeholder="Enter CHN Primary Name" name="CaseWorker" required>
+	    	  </div>
+    	  </div>
+    	
+    </div>
+	
+    <div class="col-sm-6">
+    	  <div class="form-group">
+			<label class="control-label col-sm-4" for="ShirtSize">Shirt Size:</label>
+	    	  <div class="col-sm-6">
+				<input type="text" class="form-control" id="ShirtSize" tabindex="9" placeholder="Enter Shirt Size" name="ShirtSize" required title="If innaplicable, enter &quot;NA&quot;">
+	    	  </div>
+	    	  <div class="col-sm-offset-4 col-sm-8">
+				<div class="radio">
+		    	  <label><input type="radio" tabindex="0" id="ChildShirtSize" name="ShirtSizeType" value="Child" required>Child&nbsp;&nbsp;</label>
+		    	  <label><input type="radio" tabindex="0" id="TeenShirtSize" name="ShirtSizeType" value="Teen" required>Teen&nbsp;&nbsp;</label>
+		    	  <label><input type="radio" tabindex="0" id="AdultShirtSize" name="ShirtSizeType" value="Adult" required>Adult&nbsp;&nbsp;</label>
+		    	  <label><input type="radio" tabindex="0" id="NAShirtSize" name="ShirtSizeType" value="NA" required>N/A</label>
+				</div>
+			  </div>
+		  </div>
+		  
+		  <div class="form-group">
+			<label class="control-label col-sm-4" for="PantSize">Pant Size:</label>
+	    	  <div class="col-sm-6">
+				<input type="text" class="form-control" id="PantSize" tabindex="10" placeholder="Enter Pant Size" name="PantSize" required title="If innaplicable, enter &quot;NA&quot;">
+	    	  </div>
+	    	  <div class="col-sm-offset-4 col-sm-8">
+				<div class="radio">
+		    	  <label><input type="radio" tabindex="0" id="ChildPantSize" name="PantSizeType" value="Child" required>Child&nbsp;&nbsp;</label>
+		    	  <label><input type="radio" tabindex="0" id="TeenPantSize" name="PantSizeType" value="Teen" required>Teen&nbsp;&nbsp;</label>
+		    	  <label><input type="radio" tabindex="0" id="AdultPantSize" name="PantSizeType" value="Adult" required>Adult&nbsp;&nbsp;</label>
+		    	  <label><input type="radio" tabindex="0" id="NAPantSize" name="PantSizeType" value="NA" required>N/A</label>
+		    	</div>
+			  </div>
+		  </div>
+		  
+		  <div class="form-group">
+			<label class="control-label col-sm-4" for="DressSize">Dress Size:</label>
+	    	  <div class="col-sm-6">
+				<input type="text" class="form-control" id="DressSize" tabindex="11" placeholder="Enter Dress Size" name="DressSize" required title="If innaplicable, enter &quot;NA&quot;">
+	    	  </div>
+	    	  <div class="col-sm-offset-4 col-sm-8">
+				<div class="radio">
+		    	  <label><input type="radio" tabindex="0" id="ChildDressSize" name="DressSizeType" value="Child" required>Child&nbsp;&nbsp;</label>
+		    	  <label><input type="radio" tabindex="0" id="TeenDressSize" name="DressSizeType" value="Teen" required>Teen&nbsp;&nbsp;</label>
+		    	  <label><input type="radio" tabindex="0" id="AdultDressSize" name="DressSizeType" value="Adult" required>Adult&nbsp;&nbsp;</label>
+		    	  <label><input type="radio" tabindex="0" id="NADressSize" name="DressSizeType" value="NA" required>N/A</label>
+		    	</div>
+			  </div>
+		  </div>
+		  
+		  <div class="form-group">
+			<label class="control-label col-sm-4" for="ShoeSize">Shoe Size:</label>
+	    	  <div class="col-sm-6">
+				<input type="text" class="form-control" id="ShoeSize" tabindex="12" placeholder="Enter Shoe Size" name="ShoeSize" required title="If innaplicable, enter &quot;NA&quot;">
+	    	  </div>
+	    	  <div class="col-sm-offset-4 col-sm-8">
+				<div class="radio">
+		    	  <label><input type="radio" tabindex="0" id="ChildShoeSize" name="ShoeSizeType" value="Child" required>Child&nbsp;&nbsp;</label>
+		    	  <label><input type="radio" tabindex="0" id="YouthShoeSize" name="ShoeSizeType" value="Youth" required>Youth&nbsp;&nbsp;</label>
+		    	  <label><input type="radio" tabindex="0" id="AdultShoeSize" name="ShoeSizeType" value="Adult" required>Adult&nbsp;&nbsp;</label>
+		    	  <label><input type="radio" tabindex="0" id="NAShoeSize" name="ShoeSizeType" value="NA" required>N/A</label>
+		    	</div>
+			  </div>
+		  </div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-sm-6">
+      <h3>Wish List</h3>
+	  
+      	  <div class="form-group">
+			<label class="control-label col-sm-3" for="wishDescription1">Item 1:</label>
+	    	  <div class="col-sm-9">
+				<input type="text" class="form-control" id="wishDescription1" tabindex="15" placeholder="Enter Wish List Item" name="wishDescription1" required>
+	    	  </div>
+    	  </div>
+    
+    	  <div class="form-group">
+			<label class="control-label col-sm-3" for="wishDescription2">Item 2:</label>
+	    	  <div class="col-sm-9">
+				<input type="text" class="form-control" id="wishDescription2" tabindex="17" placeholder="Enter Wish List Item" name="wishDescription2">
+	    	  </div>
+    	  </div>
+    
+    	  <div class="form-group">
+			<label class="control-label col-sm-3" for="wishDescription3">Item 3:</label>
+	    	  <div class="col-sm-9">
+				<input type="text" class="form-control" id="wishDescription3" tabindex="19" placeholder="Enter Wish List Item" name="wishDescription3">
+	    	  </div>
+    	  </div>
+    
+    	  <div class="form-group">
+			<label class="control-label col-sm-3" for="wishDescription4">Item 4:</label>
+	    	  <div class="col-sm-9">
+				<input type="text" class="form-control" id="wishDescription4" tabindex="21" placeholder="Enter Wish List Item" name="wishDescription4">
+	    	  </div>
+    	  </div>
+    
+    	  <div class="form-group">
+			<label class="control-label col-sm-3" for="wishDescription5">Item 5:</label>
+	    	  <div class="col-sm-9">
+				<input type="text" class="form-control" id="wishDescription5" tabindex="23" placeholder="Enter Wish List Item" name="wishDescription5">
+	    	  </div>
+    	  </div>
+    	<br>
+    </div>
+	
+    <div class="col-sm-6">
+      <h3>Favorites</h3>
+	  
+      	  <div class="form-group">
+			<label class="control-label col-sm-4" for="FavColor">Color:</label>
+	    	  <div class="col-sm-6">
+				<input type="text" class="form-control" id="FavColor" tabindex="28" placeholder="Enter Favorite Color" name="FavColor" required>
+	    	  </div>
+    	  </div>
+		  
+    	  <div class="form-group">
+			<label class="control-label col-sm-4" for="FavSportTeam">Sports Team:</label>
+	    	  <div class="col-sm-6">
+				<input type="text" class="form-control" id="FavSportTeam" tabindex="29" placeholder="Enter Favorite Sports Team" name="FavSportTeam">
+	    	  </div>
+    	  </div>
+		  
+    	  <div class="form-group">
+			<label class="control-label col-sm-4" for="FavBook">Book:</label>
+	    	  <div class="col-sm-6">
+				<input type="text" class="form-control" id="FavBook" tabindex="30" placeholder="Enter Favorite Book" name="FavBook" required>
+	    	  </div>
+    	  </div>
+		  
+    	  <div class="form-group">
+			<label class="control-label col-sm-4" for="FavMovieShow">Movie/TV Show:</label>
+	    	  <div class="col-sm-6">
+				<input type="text" class="form-control" id="FavMovieShow" tabindex="31" placeholder="Enter Favorite Movie or TV Show" name="FavMovieShow" required>
+	    	  </div>
+    	  </div>
+		  
+    	  <div class="form-group">
+			<label class="control-label col-sm-4" for="FavHobby">Hobby:</label>
+	    	  <div class="col-sm-6">
+				<input type="text" class="form-control" id="FavHobby" tabindex="32" placeholder="Enter Favorite Hobby" name="FavHobby" required>
+	    	  </div>
+    	  </div>
+		  
+    	  <div class="form-group">
+			<label class="control-label col-sm-4" for="FavMusician">Musician:</label>
+	    	  <div class="col-sm-6">
+				<input type="text" class="form-control" id="FavMusician" tabindex="33" placeholder="Enter Favorite Musician" name="FavMusician" required>
+	    	  </div>
+    	  </div>
+    	  <br><br><br>
+    	  <div class="form-group">
+			<label class="control-label col-sm-4" for="EnteredBy">Wishlist Entered By:</label>
+	    	  <div class="col-sm-6">
+				<input type="text" class="form-control" id="EnteredBy" tabindex="33" placeholder="Enter Your Name" name="EnteredBy" required>
+	    	  </div>
+    	  </div>
+    </div>
+  </div>
+  
+<br>
+
+	<button type="submit" id="SubmitWish" value="submit" class="btn btn-warning btn-lg pull-right" tabindex="34">Submit List</button>
+	
+ </form>
+ 
+</div>
+
+<br><br>
+
+	<script type="text/javascript">
+		var getOptionsApp = angular.module('getOptionsApp', [ 'ngSanitize', 'ngCsv' ]);
+
+		getOptionsApp.controller('getOptionsCtrl', function($scope, $http) {
+		
+			$scope.allOptions;
+
+			$scope.status = "yes";
+
+			$scope.getArray = function() {
+				$http.get('/retrieveOptions').success(function(data) {
+					return res.data;
+				});
+
+			};
+			
+			$http.get('/retrieveOptions').then(function(res) {
+				$scope.allOptions = res.data;
+			});
+
+		});
+	</script>
+
+</body>
+</html>

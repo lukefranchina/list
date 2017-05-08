@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Manage Wishlists - <% include includes/smalltitle %></title>
+	<meta name="viewport" content="width=device-width, initial-scale-1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" media="screen" href="css/style.css">
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+	<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+	<script	src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.5.8/angular-sanitize.min.js"></script>
+	<script	src="https://cdnjs.cloudflare.com/ajax/libs/ng-csv/0.3.6/ng-csv.min.js"></script>
+	<style>
+		html {overflow-y: scroll;}
+		#user-list {margin-bottom: 30px;}
+	</style>
+</head>
+
+<body>
+<% include includes/navbar %>
+
+	<div class="container">
+	
+		<div class="jumbotron">
+			<h1>Manage Wishlists</h1>
+			<h2><% include includes/smalltitle %></h2>
+		</div>
+
+		 <div id="user-list" class="row" ng-app="getWishesApp" ng-controller="getWishesCtrl">
+	
+	        <button type="button" class="btn btn-info center-block btn-lg" id="exportMe"
+				filename="Wishlist.csv"
+				csv-header="[	'Wishlist ID', 'First Name', 'Last Initial', 'Age', 'Gender', 'Placement Type',
+								'Placement Name', 'BHN Primary', 'Shirt Size', 'Shirt Size Type', 
+								'Pant Size', 'Pant Size Type', 'Dress Size', 'Dress Size Type', 'Shoe Size',
+								'Shoe Size Type', 'Fav Color', 'Fav Sport Team', 'Fav Book', 'Fav MovieShow', 
+								'Fav Hobby', 'Fav Musician', 'List Item 1', 'Item 1 Received?', 'List Item 2', 
+								'Item 2 Received?', 'List Item 3', 'Item 3 Received?', 'List Item 4', 
+								'Item 4 Received?', 'List Item 5', 'Item 5 Received?', 'Entered By', 'Donor',
+								'Database ID'
+    						]" 
+    			decimal-separator="." 
+    			field-separator="," 
+    			ng-csv="allWishes" 
+    			csv-header="getHeader()">
+    			<span class="glyphicon glyphicon-download-alt"></span> Export Wishlist to Spreadsheet
+    		</button>
+	
+		<div class="col-sm-12">
+			<br>
+			<div class="row">
+				<div class="col-md-4">Filter for a specific item:
+					<input style="border-radius: 0px;" type="text" ng-model="search" placeholder="Filter" class="form-control" />
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-md-12" ng-show="filteredItems > 0">
+        
+					<table class="table table-striped table-bordered">
+					 <thead>
+						<th>WISHLIST ID&nbsp;<a ng-click="sort_by('name');"><i class="glyphicon glyphicon-sort"></i></a></th>
+						<th>FIRST NAME&nbsp;<a ng-click="sort_by('firstname__c');"><i class="glyphicon glyphicon-sort"></i></a></th>
+						<th>LAST INITIAL&nbsp;<a ng-click="sort_by('lastinitial__c');"><i class="glyphicon glyphicon-sort"></i></a></th>
+						<th>AGE&nbsp;<a ng-click="sort_by('age__c');"><i class="glyphicon glyphicon-sort"></i></a></th>
+						<th>GENDER&nbsp;<a ng-click="sort_by('gender__c');"><i class="glyphicon glyphicon-sort"></i></a></th>
+						<th>PLACEMENT TYPE&nbsp;<a ng-click="sort_by('placementtype__c');"><i class="glyphicon glyphicon-sort"></i></a></th>
+						<th>PLACEMENT NAME&nbsp;<a ng-click="sort_by('placementname__c');"><i class="glyphicon glyphicon-sort"></i></a></th>
+						<th>OPTIONS</th>
+					 </thead>
+					 <tbody>
+						<tr ng-repeat="wishlist__c in allWishes | filter : search | orderBy : predicate :reverse">
+							<td>{{wishlist__c.name}}</td>
+							<td>{{wishlist__c.firstname__c }}</td>
+							<td>{{wishlist__c.lastinitial__c }}</td>
+							<td>{{wishlist__c.age__c }}</td>
+							<td>{{wishlist__c.gender__c }}</td>
+							<td>{{wishlist__c.placementtype__c }}</td>
+							<td>{{wishlist__c.placementname__c }}</td>
+							<td><button type="button" class="btn btn-info btn-xs center" data-toggle="modal" data-target="#myModal{{$index + 1}}">
+								 <span class="glyphicon glyphicon-th-list"></span> View List</button>
+								<a href="manageWishlists" role="button" class="btn btn-danger btn-xs" ng-click="removeWish(wishlist__c.id)">
+								 <span class="glyphicon glyphicon-trash"></span> Remove</a>
+
+									<div class="modal fade" id="myModal{{$index + 1}}" role="dialog">
+										<div class="modal-dialog">
+											<div class="modal-content">
+												<div class="modal-header">
+												 <button type="button" class="close" data-dismiss="modal">&times;</button>
+												 <h4 class="modal-title">{{ wishlist__c.firstname__c }}'s Wishlist</h4>
+												</div>
+												<div class="modal-body">
+												<form class="form-horizontal" action="/updateWishes" id="updateWishlist" method ="post" role="form">
+												<p>
+												 <b>Wishlist ID:</b> <input type="hidden" name="id" value="{{wishlist__c.id}}"> {{wishlist__c.name}} <br>
+												 <b>CHN Primary:</b> {{wishlist__c.caseworker__c}} <br><br>
+												 <b>Donor Name:</b> <input type="text" class="form-control" id="Donor" tab-index="0" placeholder="Enter Donor Name" name="Donor" value="{{wishlist__c.donor__c}}"> <br>
+													<table>
+													<tbody>
+													<tr class="wishes">
+													<td class="col-md-4">
+														<b>Item 1:</b> {{ wishlist__c.wishdescription1__c }} <br>
+														<b>&nbsp;&nbsp;Received:</b> {{ wishlist__c.wishreceived1__c }} 
+														<br>
+													</td>
+													<td class="col-md-2">
+														<b>Update Received:&nbsp;&nbsp;</b><br>
+															<input type="radio" tabindex="0" id="Yes" name="WishReceived1" value="Yes">&nbsp;Yes&nbsp;&nbsp;&nbsp;
+															<input type="radio" tabindex="0" id="No" name="WishReceived1" value="No">&nbsp;No&nbsp;&nbsp;
+														<br>
+													</td>
+													</tr>
+													</tbody>
+													</table>
+												<br>
+													<table>
+													<tbody>
+													<tr class="wishes">
+													<td class="col-md-4">
+														<b>Item 2:</b> {{ wishlist__c.wishdescription2__c }} <br>
+														<b>&nbsp;&nbsp;Received:</b> {{ wishlist__c.wishreceived2__c }} 
+														<br>
+													</td>
+													<td class="col-md-2">
+														<b>Update Received:&nbsp;&nbsp;</b><br>
+															<input type="radio" tabindex="0" id="Yes" name="WishReceived2" value="Yes">&nbsp;Yes&nbsp;&nbsp;&nbsp;
+															<input type="radio" tabindex="0" id="No" name="WishReceived2" value="No">&nbsp;No&nbsp;&nbsp;
+														<br>
+													</td>
+													</tr>
+													</tbody>
+													</table>
+												<br>
+													<table>
+													<tbody>
+													<tr class="wishes">
+													<td class="col-md-4">
+														<b>Item 3:</b> {{ wishlist__c.wishdescription3__c }} <br>
+														<b>&nbsp;&nbsp;Received:</b> {{ wishlist__c.wishreceived3__c }} 
+														<br>
+													</td>
+													<td class="col-md-2">
+														<b>Update Received:&nbsp;&nbsp;</b><br>
+															<input type="radio" tabindex="0" id="Yes" name="WishReceived3" value="Yes">&nbsp;Yes&nbsp;&nbsp;&nbsp;
+															<input type="radio" tabindex="0" id="No" name="WishReceived3" value="No">&nbsp;No&nbsp;&nbsp;
+														<br>
+													</td>
+													</tr>
+													</tbody>
+													</table>
+												<br>
+													<table>
+													<tbody>
+													<tr class="wishes">
+													<td class="col-md-4">
+														<b>Item 4:</b> {{ wishlist__c.wishdescription4__c }} <br>
+														<b>&nbsp;&nbsp;Received:</b> {{ wishlist__c.wishreceived4__c }} 
+														<br>
+													</td>
+													<td class="col-md-2">
+														<b>Update Received:&nbsp;&nbsp;</b><br>
+															<input type="radio" tabindex="0" id="Yes" name="WishReceived4" value="Yes">&nbsp;Yes&nbsp;&nbsp;&nbsp;
+															<input type="radio" tabindex="0" id="No" name="WishReceived4" value="No">&nbsp;No&nbsp;&nbsp;
+														<br>
+													</td>
+													</tr>
+													</tbody>
+													</table>
+												<br>
+													<table>
+													<tbody>
+													<tr class="wishes">
+													<td class="col-md-4">
+														<b>Item 5:</b> {{ wishlist__c.wishdescription5__c }} <br>
+														<b>&nbsp;&nbsp;Received:</b> {{ wishlist__c.wishreceived5__c }} 
+														<br>
+													</td>
+													<td class="col-md-2">
+														<b>Update Received:&nbsp;&nbsp;</b><br>
+															<input type="radio" tabindex="0" id="Yes" name="WishReceived5" value="Yes">&nbsp;Yes&nbsp;&nbsp;&nbsp;
+															<input type="radio" tabindex="0" id="No" name="WishReceived5" value="No">&nbsp;No&nbsp;&nbsp;
+														<br>
+													</td>
+													</tr>
+													</tbody>
+													</table>
+												</p>
+												<button type="submit" class="btn btn-warning pull-right">Update Gift Received</button>
+												<br><br>
+													<b>Entered by:</b> {{wishlist__c.enteredby__c}} 
+												</form>
+												</div>
+												<div class="modal-footer">
+												 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+												</div>
+											</div>
+										</div>
+									</div>
+							</td>
+						</tr>
+					</tbody>
+				   </table>
+				   
+				</div>
+			
+				<div class="col-md-12" ng-show="filteredItems == 0">
+					<div class="col-md-12">
+						<h4>No wishes entered</h4>
+					</div>
+				</div>
+				
+				<div class="col-md-12" ng-show="filteredItems > 0">
+					<div pagination="" page="currentPage" on-select-page="setPage(page)" boundary-links="true" total-items="filteredItems" 
+					items-per-page="entryLimit" class="pagination-small" previous-text="&laquo;" next-text="&raquo;"></div>
+				</div>
+				
+			</div>
+			<br>
+		</div>
+		</div>
+
+	</div>
+
+
+	<script type="text/javascript">
+		var getWishesApp = angular.module('getWishesApp', [ 'ngSanitize', 'ngCsv' ]);
+
+		getWishesApp.controller('getWishesCtrl', function($scope, $http) {
+		
+			$scope.allWishes;
+
+			$scope.status = "yes";
+			
+			$scope.removeWish = function(id) {
+				$http({
+					url : '/deleteWish',
+					method : "GET",
+					params : {
+						id : id
+					}
+				})
+			};
+			
+			$scope.deleteAllWishes = function() {
+				$http({
+					url : '/deleteAllWishes',
+					method : "GET"
+				})
+			};
+
+			$scope.getArray = function() {
+				$http.get('/retrieveWishes').success(function(data) {
+					return res.data;
+				});
+
+			};
+			
+			$http.get('/retrieveWishes').then(function(res) {
+				$scope.allWishes = res.data;
+				$scope.currentPage = 1; //current page
+       			$scope.entryLimit = 5; //max no of items to display in a page
+        		$scope.filteredItems = $scope.allWishes.length; //Initially for no filter
+       			$scope.totalItems = $scope.allWishes;
+			});
+			
+			$scope.setPage = function(pageNo) {
+       			$scope.currentPage = pageNo;
+    		};
+    		
+    		$scope.filter = function() {
+        		$timeout(function() {
+           		$scope.filteredItems = $scope.allWishes.length;
+        		}, 10);
+    		};
+    		
+    		$scope.sort_by = function(predicate) {
+        		$scope.predicate = predicate;
+        		$scope.reverse = !$scope.reverse;
+    		};
+
+		});
+	</script>
+
+
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Home - <% include includes/smalltitle %></title>
+	<meta name="viewport" content="width=device-width, initial-scale-1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" media="screen" href="css/style.css">
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+	<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+	<script	src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.5.8/angular-sanitize.min.js"></script>
+	<script	src="https://cdnjs.cloudflare.com/ajax/libs/ng-csv/0.3.6/ng-csv.min.js"></script>
+</head>
+<body>
+
+<% include includes/navbar %>
+
+<div class="container">
+  <div class="jumbotron">
+    <h1>Home</h1>
+    <h2><% include includes/smalltitle %></h2>
+  </div>
+  
+ <div class="row">
+		<div class="col-sm-6">
+			<a class="btn btn-block btn-lg btn-info sharp" id="createWish" href="createWishlist">
+			<br><br>
+			Enter a New Wishlist
+			<br><br><br>
+			</a>
+			<br>
+		</div>
+		<div class="col-sm-6">
+			<a class="btn btn-block btn-lg btn-warning sharp" href="manageWishlists">
+			<br><br>
+			Manage Wishlists
+			<br><br><br>
+			</a>
+			<br>
+		</div>
+  </div>
+    <div class="row">
+		<div class="col-sm-6">
+			<a class="btn btn-block btn-lg btn-success sharp" href="createUser">
+			<br><br>
+			Create a New User
+			<br><br><br>
+			</a>
+			<br>
+		</div>
+		<div class="col-sm-6">
+			<a class="btn btn-block btn-lg btn-danger sharp" href="manageUsers">
+			<br><br>
+			Manage Users
+			<br><br><br>
+			</a>
+		</div>
+  </div>
+
+<div id="user-list" class="row" ng-app="getOptionsApp" ng-controller="getOptionsCtrl">
+ <div class="row">
+ 
+     <div class="col-sm-12">
+      <h3>Wishlist Alert</h3>
+    </div>
+ 
+  	<div class="options" ng-repeat="options in allOptions">
+ 	<div class="col-sm-12">
+ 	<form class="form-horizontal" action="/updateOptions" id="updateOptions" method ="post" role="form">
+ 			<label class="control-label col-sm-2" for="wishlist_warning">Alert Message:</label>
+ 			<div class="col-sm-10">
+ 			<input type="hidden" name="id" value="{{options.id}}">
+				<input type="text" class="form-control" id="wishlist_warning" tabindex="1" placeholder="Enter Wishlist Warning" value="{{options.wishlist_warning}}" name="wishlist_warning">
+ 			</div>
+ 			<br><br>
+ 			<button type="submit" id="SubmitWish" value="submit" class="btn btn-primary btn-md pull-right" tabindex="34">Update Warning Message</button>
+ 	</form>
+ 	</div>
+ </div>
+</div>
+  
+  
+</div>
+
+	<script type="text/javascript">
+		var getOptionsApp = angular.module('getOptionsApp', [ 'ngSanitize', 'ngCsv' ]);
+
+		getOptionsApp.controller('getOptionsCtrl', function($scope, $http) {
+		
+			$scope.allOptions;
+
+			$scope.status = "yes";
+
+			$scope.getArray = function() {
+				$http.get('/retrieveOptions').success(function(data) {
+					return res.data;
+				});
+
+			};
+			
+			$http.get('/retrieveOptions').then(function(res) {
+				$scope.allOptions = res.data;
+			});
+
+		});
+	</script>
+
+</body>
+</html>
